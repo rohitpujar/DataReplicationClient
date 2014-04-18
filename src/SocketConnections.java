@@ -14,15 +14,14 @@ public class SocketConnections {
 	public static void addToSocketConnections(Integer id, Socket socket) {
 
 		socketConnections.put(id, socket);
-//		System.out.println("Node " + id + " added to socket connections...");
 	}
 
 	public static void displaySocketConnections() {
 
 		System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-		Iterator it = socketConnections.entrySet().iterator();
+		Iterator<Map.Entry<Integer, Socket>> it = socketConnections.entrySet().iterator();
 		while (it.hasNext()) {
-			Map.Entry pairs = (Map.Entry) it.next();
+			Map.Entry<Integer, Socket> pairs = it.next();
 			System.out.println(pairs.getKey() + " = " + pairs.getValue());
 		}
 
