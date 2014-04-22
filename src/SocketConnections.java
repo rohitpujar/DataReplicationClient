@@ -5,7 +5,17 @@ import java.util.Map;
 
 public class SocketConnections {
 
+	private static int myNodeId;
 	static private Map<Integer, Socket> socketConnections = new HashMap<Integer, Socket>();
+
+	
+	public static int getMyNodeId() {
+		return myNodeId;
+	}
+
+	public static void setMyNodeId(int myNodeId) {
+		SocketConnections.myNodeId = myNodeId;
+	}
 
 	public static Map<Integer, Socket> getSocketConnections() {
 		return socketConnections;
