@@ -1,5 +1,5 @@
 
 public enum Message {
 
-	PING,READ,WRITE;
+	PING,READ,WRITE,READ_RESPONSE;
 }

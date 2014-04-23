@@ -1,13 +1,14 @@
 public class Constants {
 
-	private static Boolean readOperation;
-	private static Boolean writeOperation;
+	private static Boolean readOperation = false;
+	private static Boolean writeOperation = false;
 
 	public static Boolean getReadOperation() {
 		return readOperation;
 	}
 
 	public static void setReadOperation(Boolean readOperation) {
+		System.out.println("READ operation SET to : "+readOperation);
 		Constants.readOperation = readOperation;
 	}
 
