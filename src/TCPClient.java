@@ -33,9 +33,12 @@ public class TCPClient {
 	private static void clientConsole() {
 
 		while (true) {
-			System.out.println("1. Ping Servers");
-			System.out.println("2. Read objects ");
-			System.out.println("3. Write/Modify objects");
+			System.out.println("	------------------------");
+			System.out.println("	1. Ping Servers");
+			System.out.println("	2. Read objects ");
+			System.out.println("	3. Write/Modify objects");
+			System.out.println("	------------------------");
+			System.out.println();
 			MessageSender msgSender = new MessageSender();
 			Scanner in = new Scanner(System.in);
 			int input = in.nextInt();

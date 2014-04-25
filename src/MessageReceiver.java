@@ -28,7 +28,7 @@ public class MessageReceiver extends Thread {
 
 			while (true) {
 				String message = dis.readUTF().toString();
-				System.out.println("Server says : " + message);
+				System.out.println("																	Server says : " + message);
 
 				List<String> recvdMsgTokens = new ArrayList<String>();
 				StringTokenizer msgTokens = new StringTokenizer(message, ",");
@@ -42,28 +42,40 @@ public class MessageReceiver extends Thread {
 				// }
 				if (recvdMsgTokens.get(0).equals("true")) {
 					upAck++;
-
-					System.out.println("Ack incremented");
-					System.out.println("READ boolean status : "+Constants.getReadOperation());
+					System.out.println("				###### ACK count : " + upAck + "  #########");
+					System.out.println(" 						READ SET : " + Constants.getReadOperation());
+					System.out.println(" 					   WRITE SET : " + Constants.getWriteOperation());
+					System.out.println(" 				########################################");
 					// READ OPERATION
 					if (Constants.getReadOperation() == true) {
+						Constants.setWriteOperation(false);
 						if (upAck > 0) {
 							System.out.println("Read is : " + Constants.getReadOperation());
 							if (Constants.getReadOperation() == true) {
 								ReadWriteOperation readOperation = new ReadWriteOperation();
 								readOperation.readOperation(Integer.parseInt(recvdMsgTokens.get(1)));
 								Constants.setReadOperation(false);
+								upAck = 0;
 
 							}
 						}
 					}
 					// WRITE OPERATION
 					if (Constants.getWriteOperation() == true) {
+
+						// Toggle the Read/Write. If READ is true, set write to
+						// false, to distinguish between the Ack's. Because, if
+						// write is set to true and the user selects read
+						// operation next,the write operation is never made
+						// false
+
+						Constants.setReadOperation(false);
 						if (upAck > 1) {
-							System.out.println("	** " + upAck + " ACK's received for the write operation **");
+							System.out.println("~ " + upAck + " ACK's received for the write operation **");
 							ReadWriteOperation writeOperation = new ReadWriteOperation();
 							writeOperation.writeOperation();
 							Constants.setWriteOperation(false);
+							upAck = 0;
 						}
 					}
 				} else if (recvdMsgTokens.get(0).equals("false")) {
@@ -74,6 +86,7 @@ public class MessageReceiver extends Thread {
 
 					if (Constants.getWriteOperation() == true && downAck > 1) {
 						System.out.println(" 		**Minimum no. of Servers required for WRITE operation not UP");
+						upAck = 0;
 					}
 					// if (downAck > 1) {
 					// System.out.println("^^^^^^ Minimum no. of Servers required for this operation aren't present  ^^^^^^^");
@@ -81,9 +94,10 @@ public class MessageReceiver extends Thread {
 				}
 				if (recvdMsgTokens.get(0).equals(Message.READ_RESPONSE.toString())) {
 					System.out.println("#### Object read request's response : ");
-//					+ recvdMsgTokens.get(1) + "," + recvdMsgTokens.get(2) + ","+ recvdMsgTokens.get(3));
-					for(String read : recvdMsgTokens){
-						System.out.print(read+" ");
+					// + recvdMsgTokens.get(1) + "," + recvdMsgTokens.get(2) +
+					// ","+ recvdMsgTokens.get(3));
+					for (String read : recvdMsgTokens) {
+						System.out.print(read + " ");
 					}
 				}
 

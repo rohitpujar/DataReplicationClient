@@ -11,24 +11,28 @@ public class ReadWriteOperation {
 	// send the actual object you want to read, to the server
 	public void readOperation(int serverNodeID) {
 		msgSender = new MessageSender();
-//		msgSender.sendMessage(Message.READ.toString() + "," + object + "," + SocketConnections.getMyNodeId(), hashedServers[0]);
-//		msgSender.sendMessage(Message.READ.toString() + "," + object + "," + SocketConnections.getMyNodeId(), hashedServers[1]);
-//		msgSender.sendMessage(Message.READ.toString() + "," + object + "," + SocketConnections.getMyNodeId(), hashedServers[2]);
+		// msgSender.sendMessage(Message.READ.toString() + "," + object + "," +
+		// SocketConnections.getMyNodeId(), hashedServers[0]);
+		// msgSender.sendMessage(Message.READ.toString() + "," + object + "," +
+		// SocketConnections.getMyNodeId(), hashedServers[1]);
+		// msgSender.sendMessage(Message.READ.toString() + "," + object + "," +
+		// SocketConnections.getMyNodeId(), hashedServers[2]);
 
-		for(int i : hashedServers){
-			if(i == serverNodeID){
-				String message = Message.READ.toString()+ "," + object + "," + SocketConnections.getMyNodeId();
+		for (int i : hashedServers) {
+			if (i == serverNodeID) {
+				System.out.println("					**Sending READ requests to Server : " + i);
+				String message = Message.READ.toString() + "," + object + "," + SocketConnections.getMyNodeId();
 				msgSender.sendMessage(message, i);
 			}
 		}
 	}
-	
-	public void writeOperation(){
-		
+
+	public void writeOperation() {
+
 		msgSender = new MessageSender();
-		msgSender.sendMessage(Message.WRITE.toString()+","+objectToWrite+","+SocketConnections.getMyNodeId()+",",hashedServers[0]);
-		msgSender.sendMessage(Message.WRITE.toString()+","+objectToWrite+","+SocketConnections.getMyNodeId()+",",hashedServers[1]);
-		msgSender.sendMessage(Message.WRITE.toString()+","+objectToWrite+","+SocketConnections.getMyNodeId()+",",hashedServers[2]);
+		msgSender.sendMessage(Message.WRITE.toString() + "," + objectToWrite + "," + SocketConnections.getMyNodeId() + ",", hashedServers[0]);
+		msgSender.sendMessage(Message.WRITE.toString() + "," + objectToWrite + "," + SocketConnections.getMyNodeId() + ",", hashedServers[1]);
+		msgSender.sendMessage(Message.WRITE.toString() + "," + objectToWrite + "," + SocketConnections.getMyNodeId() + ",", hashedServers[2]);
 		System.out.println(" * Write request sent along with object *");
 	}
 
@@ -46,20 +50,20 @@ public class ReadWriteOperation {
 		msgSender.sendMessage(Message.PING.toString() + "," + SocketConnections.getMyNodeId(), hashServers[2]);
 
 	}
-	
-	public void pingServersForWriteOperation(){
+
+	public void pingServersForWriteOperation() {
 		Constants.setWriteOperation(true);
 		System.out.println("Please enter object,value");
 		Scanner in = new Scanner(System.in);
 		objectToWrite = in.nextLine();
 		String[] dataForWrite = objectToWrite.split(",");
-		
+
 		int[] hashServers = getHashedServers(dataForWrite[0]);
 		msgSender = new MessageSender();
 		msgSender.sendMessage(Message.PING.toString() + "," + SocketConnections.getMyNodeId(), hashServers[0]);
 		msgSender.sendMessage(Message.PING.toString() + "," + SocketConnections.getMyNodeId(), hashServers[1]);
 		msgSender.sendMessage(Message.PING.toString() + "," + SocketConnections.getMyNodeId(), hashServers[2]);
-		
+
 	}
 
 	private int[] getHashedServers(String object) {
@@ -77,8 +81,6 @@ public class ReadWriteOperation {
 		int hashValue = object.hashCode();
 		// to generate a POSITIVE hash code value
 		int index = (hashValue & 0x7FFFFFFF) % totalNodes;
-		System.out.println("*** hash for " + object + " is : " + index);
-		System.out.println("These servers will be selected");
 		hashedServers = new int[3];
 		for (int i = 0; i < values.size(); i++) {
 			if (values.get(i) == index) {
@@ -89,9 +91,12 @@ public class ReadWriteOperation {
 			}
 		}
 		System.out.println("----------- Final selected servers ---------");
+		System.out.println("*** hash for " + object + " is : " + index);
 		for (int j : hashedServers) {
-			System.out.println(j);
+			System.out.print("	" + j + " ");
 		}
+		System.out.println();
+		System.out.println("----------------");
 		return hashedServers;
 	}
 }
