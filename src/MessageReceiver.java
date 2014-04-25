@@ -43,7 +43,7 @@ public class MessageReceiver extends Thread {
 				if (recvdMsgTokens.get(0).equals("true")) {
 					upAck++;
 					System.out.println("				###### ACK count : " + upAck + "  #########");
-					System.out.println(" 						READ SET : " + Constants.getReadOperation());
+					System.out.println(" 					READ SET : " + Constants.getReadOperation());
 					System.out.println(" 					   WRITE SET : " + Constants.getWriteOperation());
 					System.out.println(" 				########################################");
 					// READ OPERATION
@@ -93,11 +93,16 @@ public class MessageReceiver extends Thread {
 					// }
 				}
 				if (recvdMsgTokens.get(0).equals(Message.READ_RESPONSE.toString())) {
-					System.out.println("#### Object read request's response : ");
-					// + recvdMsgTokens.get(1) + "," + recvdMsgTokens.get(2) +
-					// ","+ recvdMsgTokens.get(3));
-					for (String read : recvdMsgTokens) {
-						System.out.print(read + " ");
+					
+					if(recvdMsgTokens.get(1).equals(Message.OBJECT_NOT_FOUND.toString())){
+						System.out.println(" 	>>>>> OBJECT NOT FOUND ");
+					} else{
+					// System.out.println("#### Object read request's response : ");
+					System.out.println("Object/Value/Version ==>> " + recvdMsgTokens.get(1) + "  " + recvdMsgTokens.get(3) + " "
+							+ recvdMsgTokens.get(2));
+					// for (String read : recvdMsgTokens) {
+					// System.out.print(read + " ");
+					// }
 					}
 				}
 

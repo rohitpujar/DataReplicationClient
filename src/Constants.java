@@ -8,7 +8,6 @@ public class Constants {
 	}
 
 	public static void setReadOperation(Boolean readOperation) {
-		System.out.println("READ operation SET to : "+readOperation);
 		Constants.readOperation = readOperation;
 	}
 
