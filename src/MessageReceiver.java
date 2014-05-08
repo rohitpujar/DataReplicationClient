@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import com.sun.org.glassfish.external.statistics.Statistic;
+
 public class MessageReceiver extends Thread {
 
 	DataInputStream dis;
@@ -20,6 +22,9 @@ public class MessageReceiver extends Thread {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Thread#run()
+	 */
 	@Override
 	public void run() {
 
@@ -46,8 +51,13 @@ public class MessageReceiver extends Thread {
 					System.out.println(" 					READ SET : " + Constants.getReadOperation());
 					System.out.println(" 					   WRITE SET : " + Constants.getWriteOperation());
 					System.out.println(" 				########################################");
+					
+					
 					// READ OPERATION
 					if (Constants.getReadOperation() == true) {
+//						one ack received = one message incremented
+						StaticalAnalysis.setReadMessages(1);
+//						***************************************
 						Constants.setWriteOperation(false);
 						if (upAck > 0) {
 							System.out.println("Read is : " + Constants.getReadOperation());
@@ -62,6 +72,8 @@ public class MessageReceiver extends Thread {
 					}
 					// WRITE OPERATION
 					if (Constants.getWriteOperation() == true) {
+						
+						StaticalAnalysis.setWriteMessages(1);
 
 						// Toggle the Read/Write. If READ is true, set write to
 						// false, to distinguish between the Ack's. Because, if
@@ -74,19 +86,28 @@ public class MessageReceiver extends Thread {
 							System.out.println("~ " + upAck + " ACK's received for the write operation **");
 							ReadWriteOperation writeOperation = new ReadWriteOperation();
 							writeOperation.writeOperation();
+							System.out.println("	< Write Operation Successful >");
 							Constants.setWriteOperation(false);
 							upAck = 0;
+							
+							System.out.println("############### Total messages exchanged for WRITE : "+StaticalAnalysis.getWriteMessages());
+							StaticalAnalysis.setWriteMessagesToZero();
 						}
 					}
 				} else if (recvdMsgTokens.get(0).equals("false")) {
 					downAck++;
+					
 					if (Constants.getReadOperation() == true && downAck == 3) {
 						System.out.println("		**No Servers Up for READ Operation");
+						StaticalAnalysis.setReadMessagesToZero();
+						downAck=0;
 					}
 
 					if (Constants.getWriteOperation() == true && downAck > 1) {
 						System.out.println(" 		**Minimum no. of Servers required for WRITE operation not UP");
 						upAck = 0;
+						downAck=0;
+						StaticalAnalysis.setWriteMessagesToZero();
 					}
 					// if (downAck > 1) {
 					// System.out.println("^^^^^^ Minimum no. of Servers required for this operation aren't present  ^^^^^^^");
@@ -94,6 +115,9 @@ public class MessageReceiver extends Thread {
 				}
 				if (recvdMsgTokens.get(0).equals(Message.READ_RESPONSE.toString())) {
 					
+//					*****
+					StaticalAnalysis.setReadMessages(1);
+//					*****
 					if(recvdMsgTokens.get(1).equals(Message.OBJECT_NOT_FOUND.toString())){
 						System.out.println(" 	>>>>> OBJECT NOT FOUND ");
 					} else{
@@ -104,6 +128,9 @@ public class MessageReceiver extends Thread {
 					// System.out.print(read + " ");
 					// }
 					}
+					
+					System.out.println("############### Total messages exchanged for READ : "+StaticalAnalysis.getReadMessages());
+					StaticalAnalysis.setReadMessagesToZero();
 				}
 
 			}

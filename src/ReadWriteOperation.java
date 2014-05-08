@@ -23,21 +23,30 @@ public class ReadWriteOperation {
 				System.out.println("					**Sending READ requests to Server : " + i);
 				String message = Message.READ.toString() + "," + object + "," + SocketConnections.getMyNodeId();
 				msgSender.sendMessage(message, i);
+				
+				StaticalAnalysis.setReadMessages(1);
 			}
 		}
 	}
 
 	public void writeOperation() {
 
+		
+		
+		
 		msgSender = new MessageSender();
 		msgSender.sendMessage(Message.WRITE.toString() + "," + objectToWrite + "," + SocketConnections.getMyNodeId() + ",", hashedServers[0]);
 		msgSender.sendMessage(Message.WRITE.toString() + "," + objectToWrite + "," + SocketConnections.getMyNodeId() + ",", hashedServers[1]);
 		msgSender.sendMessage(Message.WRITE.toString() + "," + objectToWrite + "," + SocketConnections.getMyNodeId() + ",", hashedServers[2]);
 		System.out.println(" * Write request sent along with object *");
+		
+		StaticalAnalysis.setWriteMessages(3);
 	}
 
 	public void pingServersForReadOperation() {
 
+//		StaticalAnalysis.setReadMessagesToZero();
+		
 		Constants.setReadOperation(true);
 		System.out.println("Enter the object you want to read");
 		Scanner in = new Scanner(System.in);
@@ -48,10 +57,15 @@ public class ReadWriteOperation {
 		msgSender.sendMessage(Message.PING.toString() + "," + SocketConnections.getMyNodeId(), hashServers[0]);
 		msgSender.sendMessage(Message.PING.toString() + "," + SocketConnections.getMyNodeId(), hashServers[1]);
 		msgSender.sendMessage(Message.PING.toString() + "," + SocketConnections.getMyNodeId(), hashServers[2]);
-
+		
+//		sending requests to three serves, so increment three
+		StaticalAnalysis.setReadMessages(3);
 	}
 
 	public void pingServersForWriteOperation() {
+		
+//		StaticalAnalysis.setWriteMessagesToZero();
+		
 		Constants.setWriteOperation(true);
 		System.out.println("Please enter object,value");
 		Scanner in = new Scanner(System.in);
@@ -64,6 +78,7 @@ public class ReadWriteOperation {
 		msgSender.sendMessage(Message.PING.toString() + "," + SocketConnections.getMyNodeId(), hashServers[1]);
 		msgSender.sendMessage(Message.PING.toString() + "," + SocketConnections.getMyNodeId(), hashServers[2]);
 
+		StaticalAnalysis.setWriteMessages(3);
 	}
 
 	private int[] getHashedServers(String object) {
