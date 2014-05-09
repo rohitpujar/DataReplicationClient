@@ -5,7 +5,8 @@ This is a Client version of Data Replication System.
 
 READ Operation
 
-To perform any of the Read operation, the input for object name is taken from the client. A hash function is calculated on the input object that generates a value between 0 and 6. Value generated plus next two of it will be the selected as the servers for the operation. A ping message is sent to these selected servers, the first server which replies is the one selected for the Read operation.
+* To perform any of the Read operation, the input for object name is taken from the client. A hash function is calculated on  the input object that generates a value between 0 and 6. Value generated plus next two of it will be the selected as the    servers for the operation. A ping message is sent to these selected servers, the first server which replies is the one      selected for the Read operation.
+
 1.	Reply from just one server is enough to perform reads.
 2.	Any of the three servers should be up for the Read operation to be successful.
 
